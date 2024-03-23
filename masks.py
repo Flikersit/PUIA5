@@ -19,10 +19,11 @@ def create_mask(image_info, annotations, output_folder):
         if ann['image_id'] == image_info['id']:
             # Extract segmentation polygon
             for seg in ann['segmentation']:
-                # Convert polygons to a binary mask and add it to the main mask
-                rr, cc = skimage.draw.polygon(seg[1::2], seg[0::2], mask_np.shape)
-                mask_np[rr, cc] = ann["category_id"]
-                object_number += 1 #We are assigning each object a unique integer value (labeled mask)
+                if ann["category_id"] == 5:
+                    # Convert polygons to a binary mask and add it to the main mask
+                    rr, cc = skimage.draw.polygon(seg[1::2], seg[0::2], mask_np.shape)
+                    mask_np[rr, cc] = ann["category_id"]
+                    object_number += 1 #We are assigning each object a unique integer value (labeled mask)
     
     name, extension = os.path.splitext(image_info['file_name'])  # Разделяем имя файла и его расширение
     # Save the numpy array as a JPEG using imsave function
